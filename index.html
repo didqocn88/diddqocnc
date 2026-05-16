@@ -3,22 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>단어 이어말하기</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&display=swap');
 
 :root {
-  --bg:       #0F1117;
-  --surface:  #1A1D27;
-  --surface2: #22263A;
-  --border:   #2E3354;
-  --primary:  #7B61FF;
-  --glow:     rgba(123,97,255,0.35);
-  --amber:    #F5A623;
-  --green:    #2ECC8F;
-  --red:      #FF4D6D;
-  --text:     #F0F0FF;
-  --muted:    #7B82A8;
+  --bg:       #F0F4FA;
+  --surface:  #FFFFFF;
+  --surface2: #EAF0FA;
+  --border:   #C8D8F0;
+  --primary:  #1A6FD4;
+  --glow:     rgba(26,111,212,0.15);
+  --amber:    #C47A0A;
+  --green:    #1A9E6A;
+  --red:      #D93040;
+  --text:     #0D1A2E;
+  --muted:    #5A6A8A;
   --card-r:   22px;
 }
 
@@ -27,400 +26,185 @@
 body {
   font-family:'Noto Sans KR', sans-serif;
   background: var(--bg);
-  min-height: 100dvh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 20px 16px;
+  padding: 24px 18px;
   overflow-x: hidden;
   background-image:
-    radial-gradient(ellipse 60% 40% at 15% 0%,   rgba(123,97,255,0.12) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 50% at 85% 100%,  rgba(46,204,143,0.07) 0%, transparent 60%);
+    radial-gradient(ellipse 60% 40% at 15% 0%, rgba(26,111,212,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 85% 100%, rgba(26,158,106,0.05) 0%, transparent 60%);
 }
 
-/* ── WRAPPER ── */
-.wrap {
-  width: 100%;
-  max-width: 520px;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
+.wrap { width:100%; max-width:540px; display:flex; flex-direction:column; gap:0; }
 
-/* ── HEADER ── */
-.top-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 18px;
-}
-.logo {
-  font-size: 20px;
-  font-weight: 900;
-  color: var(--text);
-  letter-spacing: -0.5px;
-}
-.logo em { color: var(--primary); font-style: normal; }
+.top-bar { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; }
+.logo { font-size:24px; font-weight:900; color:var(--text); letter-spacing:-0.5px; }
+.logo em { color:var(--primary); font-style:normal; }
 
-.stage-pills {
-  display: flex;
-  gap: 6px;
-}
+.stage-pills { display:flex; gap:8px; }
 .pill {
-  width: 32px; height: 32px;
-  border-radius: 50%;
-  border: 2px solid var(--border);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 13px; font-weight: 700;
-  color: var(--muted);
-  transition: all .35s ease;
+  width:40px; height:40px; border-radius:50%;
+  border:2.5px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+  font-size:16px; font-weight:900; color:var(--muted);
+  transition:all .35s ease;
 }
-.pill.active  { border-color: var(--primary); color: var(--primary); background: rgba(123,97,255,.15); box-shadow: 0 0 12px var(--glow); }
-.pill.cleared { border-color: var(--green);   color: var(--green);   background: rgba(46,204,143,.12); }
+.pill.active  { border-color:var(--primary); color:var(--primary); background:rgba(26,111,212,.1); box-shadow:0 0 12px var(--glow); }
+.pill.cleared { border-color:var(--green); color:var(--green); background:rgba(26,158,106,.1); }
 
-/* ── MAIN CARD ── */
 .card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 28px;
-  padding: 28px 24px 24px;
-  box-shadow: 0 24px 60px rgba(0,0,0,.5);
-  position: relative;
-  overflow: hidden;
+  background:var(--surface);
+  border:1.5px solid var(--border);
+  border-radius:28px;
+  padding:32px 26px 28px;
+  box-shadow:0 8px 32px rgba(26,111,212,0.09), 0 2px 8px rgba(0,0,0,0.04);
+  position:relative; overflow:hidden;
 }
 .card::before {
   content:'';
-  position: absolute; inset: 0 0 auto 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--primary), #A78BFA, var(--green));
-  border-radius: 28px 28px 0 0;
+  position:absolute; inset:0 0 auto 0; height:4px;
+  background:linear-gradient(90deg, var(--primary), #70AAEE, var(--green));
+  border-radius:28px 28px 0 0;
 }
 
-/* ── STATUS ROW ── */
-.status-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--muted);
-}
+.status-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; }
 .timer-pill {
-  display: flex; align-items: center; gap: 5px;
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  padding: 5px 14px;
-  font-size: 15px;
-  font-weight: 900;
-  color: var(--text);
-  transition: color .3s, border-color .3s, box-shadow .3s;
+  display:flex; align-items:center; gap:6px;
+  background:var(--surface2); border:1.5px solid var(--border);
+  border-radius:999px; padding:7px 18px;
+  font-size:20px; font-weight:900; color:var(--text);
+  transition:color .3s, border-color .3s, box-shadow .3s;
 }
 .timer-pill.urgent {
-  color: var(--red);
-  border-color: var(--red);
-  box-shadow: 0 0 14px rgba(255,77,109,.3);
-  animation: urgentPulse .5s ease infinite alternate;
+  color:var(--red); border-color:var(--red);
+  box-shadow:0 0 12px rgba(217,48,64,.2);
+  animation:urgentPulse .5s ease infinite alternate;
 }
-@keyframes urgentPulse { to { transform: scale(1.05); } }
+@keyframes urgentPulse { to { transform:scale(1.06); } }
 
-/* progress bar */
-.prog-wrap { height: 5px; background: var(--border); border-radius: 999px; margin-bottom: 22px; overflow: hidden; }
-.prog-fill  { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--primary), var(--amber)); transition: width 1s linear; }
+.stage-lbl { font-size:18px; font-weight:900; color:var(--text); }
+.phase-lbl { font-size:16px; font-weight:700; color:var(--primary); }
 
-/* ── PHASE LABEL ── */
-.phase-label {
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--primary);
-  margin-bottom: 8px;
-  opacity: 0;
-  animation: fadeUp .4s ease forwards;
-}
-@keyframes fadeUp { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+.prog-wrap { height:8px; background:var(--border); border-radius:999px; margin-bottom:26px; overflow:hidden; }
+.prog-fill { height:100%; border-radius:999px; background:linear-gradient(90deg, var(--primary), var(--amber)); transition:width 1s linear; }
 
-/* ── INSTRUCTION ── */
-.instruction {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 24px;
-  line-height: 1.6;
-  min-height: 48px;
-}
-.instruction .sub {
-  display: block;
-  font-size: 13px;
-  font-weight: 400;
-  color: var(--muted);
-  margin-top: 4px;
-}
+.instruction { font-size:20px; font-weight:700; color:var(--text); margin-bottom:26px; line-height:1.6; min-height:56px; }
+.instruction .sub { display:block; font-size:17px; font-weight:400; color:var(--muted); margin-top:6px; }
 
-/* ── SEQUENCE TRACK (show phase) ── */
-.sequence-track {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 10px;
-  min-height: 100px;
-  margin-bottom: 8px;
-}
-.seq-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  opacity: 0;
-}
-.seq-item.visible { animation: popChain .45s cubic-bezier(.34,1.56,.64,1) forwards; }
-@keyframes popChain {
-  from { opacity:0; transform: scale(.4) translateY(20px); }
-  to   { opacity:1; transform: scale(1) translateY(0); }
-}
+.sequence-track { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:10px; min-height:110px; margin-bottom:8px; }
+.seq-item { display:flex; flex-direction:column; align-items:center; gap:6px; opacity:0; }
+.seq-item.visible { animation:popChain .45s cubic-bezier(.34,1.56,.64,1) forwards; }
+@keyframes popChain { from{opacity:0;transform:scale(.4) translateY(20px)} to{opacity:1;transform:scale(1) translateY(0)} }
 
 .seq-bubble {
-  background: linear-gradient(135deg, var(--primary) 0%, #A78BFA 100%);
-  color: white;
-  border-radius: 16px;
-  padding: 14px 22px;
-  font-size: 20px;
-  font-weight: 900;
-  box-shadow: 0 6px 20px var(--glow);
-  white-space: nowrap;
-  position: relative;
+  background:linear-gradient(135deg, var(--primary) 0%, #70AAEE 100%);
+  color:white; border-radius:16px; padding:16px 24px;
+  font-size:22px; font-weight:900;
+  box-shadow:0 4px 14px var(--glow);
+  white-space:nowrap;
 }
-.seq-num {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--muted);
-  letter-spacing: .5px;
-}
+.seq-num { font-size:14px; font-weight:700; color:var(--muted); letter-spacing:.5px; }
+.seq-arrow { font-size:20px; color:var(--border); opacity:0; transition:opacity .3s; margin-top:-20px; align-self:center; }
+.seq-arrow.visible { opacity:1; }
 
-/* arrow between items */
-.seq-arrow {
-  font-size: 18px;
-  color: var(--border);
-  opacity: 0;
-  transition: opacity .3s;
-  margin-top: -20px;
-  align-self: center;
-}
-.seq-arrow.visible { opacity: 1; }
+.big-word-area { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:160px; }
+.big-word { font-size:72px; font-weight:900; color:var(--text); letter-spacing:-2px; animation:wordIn .35s cubic-bezier(.34,1.56,.64,1); }
+@keyframes wordIn { from{opacity:0;transform:scale(1.5)} to{opacity:1;transform:scale(1)} }
+.big-num { font-size:18px; font-weight:700; color:var(--primary); margin-top:8px; letter-spacing:1px; }
 
-/* ── BIG SINGLE WORD (during reveal) ── */
-.big-word-area {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 140px;
-}
-.big-word {
-  font-size: 64px;
-  font-weight: 900;
-  color: var(--text);
-  letter-spacing: -2px;
-  animation: wordIn .35s cubic-bezier(.34,1.56,.64,1);
-}
-@keyframes wordIn {
-  from { opacity:0; transform: scale(1.5); }
-  to   { opacity:1; transform: scale(1); }
-}
-.big-num {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--primary);
-  margin-top: 6px;
-  letter-spacing: 1px;
-}
-
-/* ── WORD BUTTONS (recall phase) ── */
-.word-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
-  min-height: 120px;
-  align-items: center;
-}
+.word-grid { display:flex; flex-wrap:wrap; gap:12px; justify-content:center; min-height:130px; align-items:center; }
 .word-btn {
-  background: var(--surface2);
-  border: 2px solid var(--border);
-  border-radius: var(--card-r);
-  padding: 16px 28px;
-  font-size: 20px;
-  font-weight: 900;
-  color: var(--text);
-  cursor: pointer;
-  transition: all .2s ease;
-  font-family: 'Noto Sans KR', sans-serif;
-  position: relative;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-  opacity: 0;
-  animation: popChain .4s cubic-bezier(.34,1.56,.64,1) forwards;
+  background:var(--surface2);
+  border:2px solid var(--border);
+  border-radius:18px;
+  padding:20px 32px; font-size:24px; font-weight:900; color:var(--text);
+  cursor:pointer; transition:all .2s ease;
+  font-family:'Noto Sans KR', sans-serif;
+  position:relative; user-select:none; -webkit-tap-highlight-color:transparent;
+  opacity:0; animation:popChain .4s cubic-bezier(.34,1.56,.64,1) forwards;
 }
-.word-btn:active { transform: scale(.95); }
-.word-btn:hover  {
-  border-color: var(--primary);
-  background: rgba(123,97,255,.12);
-  box-shadow: 0 0 18px var(--glow);
-  transform: translateY(-2px);
-}
-.word-btn.done {
-  border-color: var(--green);
-  background: rgba(46,204,143,.15);
-  color: var(--green);
-  cursor: default;
-  pointer-events: none;
-}
+.word-btn:active { transform:scale(.95); }
+.word-btn:hover { border-color:var(--primary); background:rgba(26,111,212,.07); box-shadow:0 0 16px var(--glow); transform:translateY(-2px); }
+.word-btn.done { border-color:var(--green); background:rgba(26,158,106,.1); color:var(--green); cursor:default; pointer-events:none; }
 .word-btn.done::after {
-  content: attr(data-order);
-  position: absolute;
-  top: -10px; right: -10px;
-  width: 22px; height: 22px;
-  border-radius: 50%;
-  background: var(--green);
-  color: #0F1117;
-  font-size: 11px;
-  font-weight: 900;
-  display: flex; align-items: center; justify-content: center;
+  content:attr(data-order);
+  position:absolute; top:-12px; right:-12px;
+  width:26px; height:26px; border-radius:50%;
+  background:var(--green); color:white;
+  font-size:13px; font-weight:900;
+  display:flex; align-items:center; justify-content:center;
 }
-.word-btn.wrong {
-  border-color: var(--red);
-  background: rgba(255,77,109,.15);
-  animation: shake .4s ease;
-}
-@keyframes shake {
-  0%,100%{transform:translateX(0)} 20%{transform:translateX(-10px)}
-  40%{transform:translateX(10px)} 60%{transform:translateX(-7px)} 80%{transform:translateX(7px)}
-}
+.word-btn.wrong { border-color:var(--red); background:rgba(217,48,64,.08); animation:shake .4s ease; }
+@keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-10px)} 40%{transform:translateX(10px)} 60%{transform:translateX(-7px)} 80%{transform:translateX(7px)} }
 
-/* ── ANSWER TRAIL ── */
 .answer-trail {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 6px;
-  min-height: 36px;
-  margin-top: 16px;
-  padding: 10px 14px;
-  background: var(--surface2);
-  border-radius: 14px;
-  border: 1px solid var(--border);
+  display:flex; align-items:center; flex-wrap:wrap; gap:8px;
+  min-height:44px; margin-top:18px; padding:12px 16px;
+  background:var(--surface2); border-radius:14px; border:1.5px solid var(--border);
 }
-.trail-item {
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--green);
-  animation: trailIn .3s ease;
-}
+.trail-item { font-size:18px; font-weight:700; color:var(--green); animation:trailIn .3s ease; }
 @keyframes trailIn { from{opacity:0;transform:scale(.5)} to{opacity:1;transform:scale(1)} }
-.trail-arrow { color: var(--border); font-size: 13px; }
-.trail-hint  { font-size: 13px; color: var(--border); font-weight: 400; }
+.trail-arrow { color:var(--border); font-size:16px; }
+.trail-hint { font-size:16px; color:var(--muted); font-weight:400; }
 
-/* ── RESULT OVERLAY ── */
 .overlay {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,.7);
-  backdrop-filter: blur(6px);
-  display: flex; align-items: center; justify-content: center;
-  z-index: 50;
-  animation: fadeIn .3s ease;
+  position:fixed; inset:0;
+  background:rgba(230,238,250,0.78);
+  backdrop-filter:blur(6px);
+  display:flex; align-items:center; justify-content:center;
+  z-index:50; animation:fadeIn .3s ease;
 }
 @keyframes fadeIn { from{opacity:0} to{opacity:1} }
-.overlay.hidden { display: none; }
+.overlay.hidden { display:none; }
 
 .result-box {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 28px;
-  padding: 44px 36px;
-  text-align: center;
-  max-width: 340px; width: 90%;
-  box-shadow: 0 32px 80px rgba(0,0,0,.6);
-  animation: slideUp .45s cubic-bezier(.34,1.56,.64,1);
+  background:var(--surface);
+  border:1.5px solid var(--border);
+  border-radius:28px; padding:48px 36px;
+  text-align:center; max-width:360px; width:92%;
+  box-shadow:0 16px 48px rgba(26,111,212,0.12);
+  animation:slideUp .45s cubic-bezier(.34,1.56,.64,1);
 }
 @keyframes slideUp { from{transform:translateY(60px) scale(.85);opacity:0} to{transform:none;opacity:1} }
 
-.res-icon { font-size: 70px; margin-bottom: 14px; }
-.res-title { font-size: 34px; font-weight: 900; margin-bottom: 8px; }
-.res-title.ok  { color: var(--green); }
-.res-title.bad { color: var(--red); }
-.res-sub { font-size: 15px; color: var(--muted); line-height: 1.7; margin-bottom: 28px; }
+.res-icon { font-size:80px; margin-bottom:16px; }
+.res-title { font-size:36px; font-weight:900; margin-bottom:10px; }
+.res-title.ok  { color:var(--green); }
+.res-title.bad { color:var(--red); }
+.res-sub { font-size:18px; color:var(--muted); line-height:1.8; margin-bottom:32px; white-space:pre-line; }
 
-.btn {
-  display: inline-block;
-  padding: 14px 34px;
-  border-radius: 999px;
-  font-size: 16px; font-weight: 900;
-  cursor: pointer; border: none;
-  font-family: 'Noto Sans KR', sans-serif;
-  transition: all .2s ease;
-  letter-spacing: -.3px;
-}
-.btn-p { background: linear-gradient(135deg, var(--primary), #A78BFA); color: white; box-shadow: 0 8px 24px var(--glow); }
-.btn-p:hover { transform: translateY(-2px); box-shadow: 0 12px 32px var(--glow); }
-.btn-g { background: linear-gradient(135deg, var(--green), #1aA070); color: #0F1117; box-shadow: 0 8px 24px rgba(46,204,143,.3); }
-.btn-g:hover { transform: translateY(-2px); }
+.btn { display:inline-block; padding:18px 40px; border-radius:999px; font-size:20px; font-weight:900; cursor:pointer; border:none; font-family:'Noto Sans KR', sans-serif; transition:all .2s ease; letter-spacing:-.3px; }
+.btn-p { background:linear-gradient(135deg, var(--primary), #70AAEE); color:white; box-shadow:0 6px 20px var(--glow); }
+.btn-p:hover { transform:translateY(-2px); box-shadow:0 10px 28px var(--glow); }
+.btn-g { background:linear-gradient(135deg, var(--green), #0F7A52); color:white; box-shadow:0 6px 20px rgba(26,158,106,.25); }
+.btn-g:hover { transform:translateY(-2px); }
 
-/* ── START / FINAL SCREEN ── */
-.start-screen, .final-screen {
-  padding: 8px 0 4px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 0;
-}
-.hero-icon { font-size: 76px; animation: float 3s ease-in-out infinite; margin-bottom: 16px; }
+.start-screen, .final-screen { padding:10px 0 6px; display:flex; flex-direction:column; align-items:center; text-align:center; gap:0; }
+.hero-icon { font-size:84px; animation:float 3s ease-in-out infinite; margin-bottom:18px; }
 @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
-.hero-title { font-size: 26px; font-weight: 900; color: var(--text); margin-bottom: 10px; }
-.hero-sub { font-size: 15px; color: var(--muted); line-height: 1.8; margin-bottom: 28px; }
+.hero-title { font-size:30px; font-weight:900; color:var(--text); margin-bottom:12px; }
+.hero-sub { font-size:18px; color:var(--muted); line-height:1.9; margin-bottom:28px; }
 
-.stage-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; width: 100%; margin-bottom: 28px; }
-.s-card {
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  padding: 18px 8px;
-  display: flex; flex-direction: column; align-items: center; gap: 4px;
-}
-.s-card .n { font-size: 30px; font-weight: 900; color: var(--primary); }
-.s-card .l { font-size: 12px; color: var(--muted); text-align: center; line-height: 1.4; }
+.stage-cards { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; width:100%; margin-bottom:28px; }
+.s-card { background:var(--surface2); border:1.5px solid var(--border); border-radius:18px; padding:20px 8px; display:flex; flex-direction:column; align-items:center; gap:6px; }
+.s-card .n { font-size:36px; font-weight:900; color:var(--primary); }
+.s-card .l { font-size:15px; color:var(--muted); text-align:center; line-height:1.5; }
 
-.example-chain {
-  display: flex; align-items: center; gap: 8px;
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 12px 18px;
-  margin-bottom: 28px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-.ex-word {
-  font-size: 16px; font-weight: 700;
-  background: linear-gradient(135deg, var(--primary), #A78BFA);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-}
-.ex-arr { color: var(--border); font-size: 14px; }
+.example-chain { display:flex; align-items:center; gap:10px; background:var(--surface2); border:1.5px solid var(--border); border-radius:14px; padding:14px 20px; margin-bottom:28px; flex-wrap:wrap; justify-content:center; }
+.ex-word { font-size:20px; font-weight:700; color:var(--primary); }
+.ex-arr { color:var(--border); font-size:16px; }
+.ex-hint { font-size:15px; color:var(--muted); width:100%; text-align:center; margin-top:6px; }
 
-/* hidden util */
-.hidden { display: none !important; }
+.hidden { display:none !important; }
 </style>
 </head>
 <body>
 <div class="wrap">
-
-  <!-- ── TOP BAR (always visible during game) ── -->
   <div class="top-bar" id="topBar">
-    <div class="logo">🧠 단어 <em>이어말하기</em></div>
+    <div class="logo">단어 <em>이어말하기</em></div>
     <div class="stage-pills">
       <div class="pill" id="pill1">1</div>
       <div class="pill" id="pill2">2</div>
@@ -428,19 +212,16 @@ body {
     </div>
   </div>
 
-  <!-- ── MAIN CARD ── -->
   <div class="card">
-
-    <!-- START SCREEN -->
     <div id="startScreen" class="start-screen">
       <div class="hero-icon">🧠</div>
       <div class="hero-title">단어 이어말하기</div>
-      <div class="hero-sub">단어가 하나씩 차례로 나타납니다.<br>순서를 기억했다가 같은 순서로 터치하세요!</div>
+      <div class="hero-sub">단어가 하나씩 차례로 나타납니다.<br>순서를 기억했다가 같은 순서로 눌러주세요!</div>
       <div class="example-chain">
         <span class="ex-word">라면</span><span class="ex-arr">→</span>
         <span class="ex-word">기차</span><span class="ex-arr">→</span>
         <span class="ex-word">가족</span>
-        <span style="font-size:12px;color:var(--muted);width:100%;text-align:center;margin-top:4px">순서를 기억한 후, 뒤섞인 단어를 순서대로 터치!</span>
+        <span class="ex-hint">순서를 기억한 후, 뒤섞인 단어를 순서대로 눌러주세요!</span>
       </div>
       <div class="stage-cards">
         <div class="s-card"><div class="n">4</div><div class="l">1단계<br>단어</div></div>
@@ -450,28 +231,19 @@ body {
       <button class="btn btn-p" onclick="startGame()">시작하기 ▶</button>
     </div>
 
-    <!-- GAME SCREEN -->
     <div id="gameScreen" class="hidden">
       <div class="status-row">
-        <span id="stageLbl" style="color:var(--text);font-size:14px;font-weight:900;">1단계</span>
+        <span class="stage-lbl" id="stageLbl">1단계</span>
         <div class="timer-pill" id="timerPill">⏱ <span id="timerNum">--</span>초</div>
-        <span id="phaseLbl" style="color:var(--primary);font-weight:700;font-size:13px;">기억하기</span>
+        <span class="phase-lbl" id="phaseLbl">기억하기</span>
       </div>
-
       <div class="prog-wrap"><div class="prog-fill" id="progFill" style="width:100%"></div></div>
-
       <div class="instruction" id="instr"></div>
-
-      <!-- REVEAL: one word at a time -->
       <div id="revealArea" class="big-word-area hidden">
         <div class="big-word" id="bigWord"></div>
         <div class="big-num" id="bigNum"></div>
       </div>
-
-      <!-- REVIEW: full chain display -->
       <div id="reviewArea" class="sequence-track hidden"></div>
-
-      <!-- RECALL: shuffle buttons -->
       <div id="recallArea" class="hidden">
         <div class="word-grid" id="wordGrid"></div>
         <div class="answer-trail" id="answerTrail">
@@ -480,18 +252,15 @@ body {
       </div>
     </div>
 
-    <!-- FINAL SCREEN -->
     <div id="finalScreen" class="hidden final-screen">
       <div class="hero-icon">🏆</div>
       <div class="hero-title" style="color:var(--green)">완전 정복!</div>
       <div class="hero-sub" style="margin-top:8px">모든 단계를 성공했어요!<br>오늘도 두뇌 훈련 수고하셨습니다 🎉</div>
-      <button class="btn btn-g" onclick="restartGame()" style="margin-top:8px">다시 하기</button>
+      <button class="btn btn-g" onclick="restartGame()" style="margin-top:16px">다시 하기</button>
     </div>
+  </div>
+</div>
 
-  </div><!-- /.card -->
-</div><!-- /.wrap -->
-
-<!-- RESULT OVERLAY -->
 <div class="overlay hidden" id="overlay">
   <div class="result-box">
     <div class="res-icon" id="resIcon"></div>
@@ -502,253 +271,27 @@ body {
 </div>
 
 <script>
-/* ── DATA ── */
-const WORDS = [
-  '사과','바나나','강아지','고양이','하늘','바다','나무','꽃',
-  '자동차','기차','학교','병원','도서관','공원','음악','그림',
-  '친구','가족','행복','사랑','달빛','별빛','봄비','겨울',
-  '초록','빨강','노랑','파랑','노래','춤','호수','구름',
-  '태양','달','눈꽃','바람','빵','우유','국수','김밥',
-  '라면','피자','케이크','사탕','장갑','모자','양말','신발',
-  '시계','안경','버스','지하철','비행기','자전거','냉장고','텔레비전'
-];
-
-const STAGES = [
-  { level:1, count:4,  revealMs:1300, reviewMs:4000, recallSec:25  },
-  { level:2, count:7,  revealMs:1100, reviewMs:5000, recallSec:40  },
-  { level:3, count:10, revealMs:900,  reviewMs:6000, recallSec:55  },
-];
-
-/* ── STATE ── */
-let stage = 0;          // 0-based
-let cleared = [];       // which stages cleared
-let words = [];         // original order
-let selected = 0;       // how many correctly tapped
-let timer = null;       // interval id
-let timeLeft = 0;
-let resAction = null;
-
-/* ── UTILS ── */
-function shuffle(a){ const b=[...a]; for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];} return b; }
-function rndWords(n){ return shuffle(WORDS).slice(0,n); }
-function $id(id){ return document.getElementById(id); }
-function hide(...ids){ ids.forEach(id=>$id(id).classList.add('hidden')); }
-function show(...ids){ ids.forEach(id=>$id(id).classList.remove('hidden')); }
-
-/* ── PILLS ── */
-function updatePills(){
-  for(let i=0;i<3;i++){
-    const p=$id('pill'+(i+1));
-    p.className='pill';
-    if(cleared.includes(i)) p.classList.add('cleared');
-    else if(i===stage) p.classList.add('active');
-  }
-}
-
-/* ── START ── */
-function startGame(){
-  stage=0; cleared=[];
-  hide('startScreen','finalScreen');
-  show('gameScreen');
-  runStage();
-}
-
-function restartGame(){
-  stage=0; cleared=[];
-  hide('finalScreen');
-  show('startScreen');
-}
-
-/* ── STAGE RUNNER ── */
-function runStage(){
-  const s = STAGES[stage];
-  words = rndWords(s.count);
-  selected = 0;
-  clearInterval(timer);
-  updatePills();
-  $id('stageLbl').textContent = s.level+'단계';
-  hide('revealArea','reviewArea','recallArea');
-  phaseReveal();
-}
-
-/* ─ PHASE 1: reveal words one by one ─ */
-function phaseReveal(){
-  const s = STAGES[stage];
-  $id('phaseLbl').textContent = '기억하기';
-  $id('instr').innerHTML = `단어가 하나씩 나타납니다.<br><span class="sub">순서를 잘 기억하세요! (${s.count}개)</span>`;
-  $id('timerPill').innerHTML = `⏱ <span id="timerNum">--</span>초`;
-  setProgress(100);
-  show('revealArea');
-
-  let idx = 0;
-  function next(){
-    if(idx >= words.length){ phaseReview(); return; }
-    const word = words[idx];
-    const bigWord = $id('bigWord');
-    const bigNum  = $id('bigNum');
-    bigWord.style.animation = 'none';
-    requestAnimationFrame(()=>{
-      bigWord.style.animation = '';
-      bigWord.textContent = word;
-      bigNum.textContent  = `${idx+1} / ${words.length}`;
-    });
-    idx++;
-
-    // progress bar across whole reveal phase
-    const total = s.count * s.revealMs;
-    const elapsed = (idx-1) * s.revealMs;
-    // timer shows countdown for remaining items
-    $id('timerNum').textContent = s.count - idx + 1 > 0 ? (s.count - idx + 1) : 0;
-    setProgress(100 - (idx-1)/s.count*100);
-
-    timer = setTimeout(next, s.revealMs);
-  }
-  next();
-}
-
-/* ─ PHASE 2: show full chain for review ─ */
-function phaseReview(){
-  clearInterval(timer);
-  hide('revealArea');
-  const s = STAGES[stage];
-  $id('phaseLbl').textContent = '순서 확인';
-  $id('instr').innerHTML = `순서를 확인하세요!<br><span class="sub">잠시 후 숨겨집니다</span>`;
-
-  const area = $id('reviewArea');
-  area.innerHTML = '';
-  show('reviewArea');
-
-  words.forEach((w, i)=>{
-    if(i>0){
-      const arr = document.createElement('div');
-      arr.className='seq-arrow';
-      arr.textContent='→';
-      area.appendChild(arr);
-      setTimeout(()=>arr.classList.add('visible'), 80*(i*2-1));
-    }
-    const item = document.createElement('div');
-    item.className='seq-item';
-    item.innerHTML=`<div class="seq-bubble">${w}</div><div class="seq-num">${i+1}번째</div>`;
-    area.appendChild(item);
-    setTimeout(()=>item.classList.add('visible'), 80*(i*2));
-  });
-
-  // countdown timer for review
-  let rem = Math.round(s.reviewMs/1000);
-  $id('timerNum').textContent = rem;
-  setProgress(100);
-  timer = setInterval(()=>{
-    rem--;
-    $id('timerNum').textContent = rem;
-    setProgress(rem/(s.reviewMs/1000)*100);
-    if(rem<=0){ clearInterval(timer); phaseRecall(); }
-  },1000);
-}
-
-/* ─ PHASE 3: recall ─ */
-function phaseRecall(){
-  hide('reviewArea');
-  const s = STAGES[stage];
-  $id('phaseLbl').textContent = '순서 맞추기';
-  $id('instr').innerHTML = `기억한 순서대로 터치!<br><span class="sub">1번 단어부터 차례로 선택하세요</span>`;
-  show('recallArea');
-
-  // reset trail
-  const trail = $id('answerTrail');
-  trail.innerHTML = '<span class="trail-hint">여기에 선택한 단어가 표시됩니다</span>';
-
-  // render shuffled buttons
-  const grid = $id('wordGrid');
-  grid.innerHTML = '';
-  const shuffled = shuffle([...words]);
-  shuffled.forEach((w,i)=>{
-    const btn = document.createElement('button');
-    btn.className = 'word-btn';
-    btn.textContent = w;
-    btn.dataset.word = w;
-    btn.style.animationDelay = (i*0.06)+'s';
-    btn.addEventListener('click', ()=>tapWord(btn, w));
-    grid.appendChild(btn);
-  });
-
-  // timer
-  timeLeft = s.recallSec;
-  setProgress(100);
-  setTimer(timeLeft);
-  timer = setInterval(()=>{
-    timeLeft--;
-    setProgress(timeLeft/s.recallSec*100);
-    setTimer(timeLeft);
-    if(timeLeft<=0){ clearInterval(timer); showResult(false,'시간 초과','시간이 다 됐어요 😥\n다시 도전해보세요!','retry'); }
-  },1000);
-}
-
-function tapWord(btn, word){
-  if(btn.classList.contains('done')) return;
-  const expected = words[selected];
-  if(word === expected){
-    btn.classList.add('done');
-    btn.dataset.order = selected+1;
-    selected++;
-    updateTrail();
-    if(selected === words.length){
-      clearInterval(timer);
-      cleared.push(stage);
-      updatePills();
-      setTimeout(()=>{
-        if(stage < 2) showResult(true, '성공! 🎉', `${stage+1}단계 클리어!\n다음 단계로 이동합니다.`, 'next');
-        else showResult(true, '완전 성공! 🏆', '모든 단계 완료!\n정말 대단해요!', 'final');
-      }, 400);
-    }
-  } else {
-    clearInterval(timer);
-    btn.classList.add('wrong');
-    setTimeout(()=>{ btn.classList.remove('wrong');
-      showResult(false,'틀렸어요 😢',`정답은 "${expected}" 이었어요!\n처음부터 다시 해볼까요?`,'retry');
-    }, 600);
-  }
-}
-
-function updateTrail(){
-  const trail = $id('answerTrail');
-  trail.innerHTML = '';
-  words.slice(0,selected).forEach((w,i)=>{
-    if(i>0){ const a=document.createElement('span'); a.className='trail-arrow'; a.textContent='→'; trail.appendChild(a); }
-    const s=document.createElement('span'); s.className='trail-item'; s.textContent=w; trail.appendChild(s);
-  });
-  if(selected < words.length){
-    const hint=document.createElement('span'); hint.className='trail-hint';
-    hint.textContent=` (${selected+1}번째 단어는?)`; trail.appendChild(hint);
-  }
-}
-
-/* ── RESULT ── */
-function showResult(ok, title, sub, action){
-  resAction = action;
-  $id('resIcon').textContent = ok ? (action==='final'?'🏆':'🎉') : '😢';
-  $id('resTitle').textContent = title;
-  $id('resTitle').className   = 'res-title '+(ok?'ok':'bad');
-  $id('resSub').textContent   = sub;
-  const btn = $id('resBtn');
-  if(action==='next')  { btn.textContent='다음 단계 →'; btn.className='btn btn-g'; }
-  else if(action==='final'){ btn.textContent='결과 보기 🏆'; btn.className='btn btn-g'; }
-  else                 { btn.textContent='다시 도전! ↺'; btn.className='btn btn-p'; }
-  show('overlay');
-}
-
-function handleResBtn(){
-  hide('overlay');
-  if(resAction==='next')  { stage++; runStage(); }
-  else if(resAction==='final'){ hide('gameScreen'); show('finalScreen'); }
-  else runStage();
-}
-
-/* ── HELPERS ── */
-function setProgress(pct){ $id('progFill').style.width = Math.max(0,pct)+'%'; }
-function setTimer(sec){
-  $id('timerNum').textContent = sec;
-  $id('timerPill').className  = 'timer-pill'+(sec<=5?' urgent':'');
-}
+const WORDS=['사과','바나나','강아지','고양이','하늘','바다','나무','꽃','자동차','기차','학교','병원','도서관','공원','음악','그림','친구','가족','행복','사랑','달빛','별빛','봄비','겨울','초록','빨강','노랑','파랑','노래','춤','호수','구름','태양','달','눈꽃','바람','빵','우유','국수','김밥','라면','피자','케이크','사탕','장갑','모자','양말','신발','시계','안경','버스','지하철','비행기','자전거','냉장고','텔레비전'];
+const STAGES=[{level:1,count:4,revealMs:1300,reviewMs:4000,recallSec:25},{level:2,count:7,revealMs:1100,reviewMs:5000,recallSec:40},{level:3,count:10,revealMs:900,reviewMs:6000,recallSec:55}];
+let stage=0,cleared=[],words=[],selected=0,timer=null,timeLeft=0,resAction=null;
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function rndWords(n){return shuffle(WORDS).slice(0,n);}
+function $id(id){return document.getElementById(id);}
+function hide(...ids){ids.forEach(id=>$id(id).classList.add('hidden'));}
+function show(...ids){ids.forEach(id=>$id(id).classList.remove('hidden'));}
+function updatePills(){for(let i=0;i<3;i++){const p=$id('pill'+(i+1));p.className='pill';if(cleared.includes(i))p.classList.add('cleared');else if(i===stage)p.classList.add('active');}}
+function startGame(){stage=0;cleared=[];hide('startScreen','finalScreen');show('gameScreen');runStage();}
+function restartGame(){stage=0;cleared=[];hide('finalScreen');show('startScreen');}
+function runStage(){const s=STAGES[stage];words=rndWords(s.count);selected=0;clearInterval(timer);updatePills();$id('stageLbl').textContent=s.level+'단계';hide('revealArea','reviewArea','recallArea');phaseReveal();}
+function phaseReveal(){const s=STAGES[stage];$id('phaseLbl').textContent='기억하기';$id('instr').innerHTML=`단어가 하나씩 나타납니다.<br><span class="sub">순서를 잘 기억하세요! (${s.count}개)</span>`;$id('timerPill').innerHTML=`⏱ <span id="timerNum">--</span>초`;setProgress(100);show('revealArea');let idx=0;function next(){if(idx>=words.length){phaseReview();return;}const word=words[idx];const bigWord=$id('bigWord');const bigNum=$id('bigNum');bigWord.style.animation='none';requestAnimationFrame(()=>{bigWord.style.animation='';bigWord.textContent=word;bigNum.textContent=`${idx+1} / ${words.length}`;});idx++;$id('timerNum').textContent=s.count-idx+1>0?(s.count-idx+1):0;setProgress(100-(idx-1)/s.count*100);timer=setTimeout(next,s.revealMs);}next();}
+function phaseReview(){clearInterval(timer);hide('revealArea');const s=STAGES[stage];$id('phaseLbl').textContent='순서 확인';$id('instr').innerHTML=`순서를 확인하세요!<br><span class="sub">잠시 후 숨겨집니다</span>`;const area=$id('reviewArea');area.innerHTML='';show('reviewArea');words.forEach((w,i)=>{if(i>0){const arr=document.createElement('div');arr.className='seq-arrow';arr.textContent='→';area.appendChild(arr);setTimeout(()=>arr.classList.add('visible'),80*(i*2-1));}const item=document.createElement('div');item.className='seq-item';item.innerHTML=`<div class="seq-bubble">${w}</div><div class="seq-num">${i+1}번째</div>`;area.appendChild(item);setTimeout(()=>item.classList.add('visible'),80*(i*2));});let rem=Math.round(s.reviewMs/1000);$id('timerNum').textContent=rem;setProgress(100);timer=setInterval(()=>{rem--;$id('timerNum').textContent=rem;setProgress(rem/(s.reviewMs/1000)*100);if(rem<=0){clearInterval(timer);phaseRecall();}},1000);}
+function phaseRecall(){hide('reviewArea');const s=STAGES[stage];$id('phaseLbl').textContent='순서 맞추기';$id('instr').innerHTML=`기억한 순서대로 눌러주세요!<br><span class="sub">1번 단어부터 차례로 선택하세요</span>`;show('recallArea');const trail=$id('answerTrail');trail.innerHTML='<span class="trail-hint">여기에 선택한 단어가 표시됩니다</span>';const grid=$id('wordGrid');grid.innerHTML='';const shuffled=shuffle([...words]);shuffled.forEach((w,i)=>{const btn=document.createElement('button');btn.className='word-btn';btn.textContent=w;btn.dataset.word=w;btn.style.animationDelay=(i*0.06)+'s';btn.addEventListener('click',()=>tapWord(btn,w));grid.appendChild(btn);});timeLeft=s.recallSec;setProgress(100);setTimer(timeLeft);timer=setInterval(()=>{timeLeft--;setProgress(timeLeft/s.recallSec*100);setTimer(timeLeft);if(timeLeft<=0){clearInterval(timer);showResult(false,'시간 초과','시간이 다 됐어요 😥\n다시 도전해보세요!','retry');}},1000);}
+function tapWord(btn,word){if(btn.classList.contains('done'))return;const expected=words[selected];if(word===expected){btn.classList.add('done');btn.dataset.order=selected+1;selected++;updateTrail();if(selected===words.length){clearInterval(timer);cleared.push(stage);updatePills();setTimeout(()=>{if(stage<2)showResult(true,'성공! 🎉',`${stage+1}단계 클리어!\n다음 단계로 이동합니다.`,'next');else showResult(true,'완전 성공! 🏆','모든 단계 완료!\n정말 대단해요!','final');},400);}}else{clearInterval(timer);btn.classList.add('wrong');setTimeout(()=>{btn.classList.remove('wrong');showResult(false,'틀렸어요 😢',`정답은 "${expected}" 이었어요!\n처음부터 다시 해볼까요?`,'retry');},600);}}
+function updateTrail(){const trail=$id('answerTrail');trail.innerHTML='';words.slice(0,selected).forEach((w,i)=>{if(i>0){const a=document.createElement('span');a.className='trail-arrow';a.textContent='→';trail.appendChild(a);}const s=document.createElement('span');s.className='trail-item';s.textContent=w;trail.appendChild(s);});if(selected<words.length){const hint=document.createElement('span');hint.className='trail-hint';hint.textContent=` (${selected+1}번째 단어는?)`;trail.appendChild(hint);}}
+function showResult(ok,title,sub,action){resAction=action;$id('resIcon').textContent=ok?(action==='final'?'🏆':'🎉'):'😢';$id('resTitle').textContent=title;$id('resTitle').className='res-title '+(ok?'ok':'bad');$id('resSub').textContent=sub;const btn=$id('resBtn');if(action==='next'){btn.textContent='다음 단계 →';btn.className='btn btn-g';}else if(action==='final'){btn.textContent='결과 보기 🏆';btn.className='btn btn-g';}else{btn.textContent='다시 도전! ↺';btn.className='btn btn-p';}show('overlay');}
+function handleResBtn(){hide('overlay');if(resAction==='next'){stage++;runStage();}else if(resAction==='final'){hide('gameScreen');show('finalScreen');}else runStage();}
+function setProgress(pct){$id('progFill').style.width=Math.max(0,pct)+'%';}
+function setTimer(sec){$id('timerNum').textContent=sec;$id('timerPill').className='timer-pill'+(sec<=5?' urgent':'');}
 </script>
 </body>
 </html>
